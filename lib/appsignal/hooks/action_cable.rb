@@ -17,15 +17,15 @@ module Appsignal
         require "appsignal/integrations/action_cable"
         ActionCable::Channel::Base.prepend Appsignal::Integrations::ActionCableIntegration
 
-        install_subscribe_callback
-        install_unsubscribe_callback
+        # install_subscribe_callback
+        # install_unsubscribe_callback
       end
 
       private
 
       def install_subscribe_callback
         ActionCable::Channel::Base.set_callback :subscribe, :around,
-          :prepend => true do |channel, inner|
+          prepend: true do |channel, inner|
           # The request is only the original websocket request
           connection = channel.connection
           # #env is not available on the Rails ConnectionStub class used in the
@@ -53,7 +53,7 @@ module Appsignal
             transaction.add_params_if_nil { request.params }
             transaction.add_headers_if_nil { request.env }
             transaction.add_session_data { request.session if request.respond_to? :session }
-            transaction.add_tags(:request_id => request_id) if request_id
+            transaction.add_tags(request_id: request_id) if request_id
             Appsignal::Transaction.complete_current!
           end
         end
@@ -61,7 +61,7 @@ module Appsignal
 
       def install_unsubscribe_callback
         ActionCable::Channel::Base.set_callback :unsubscribe, :around,
-          :prepend => true do |channel, inner|
+          prepend: true do |channel, inner|
           # The request is only the original websocket request
           connection = channel.connection
           # #env is not available on the Rails ConnectionStub class used in the
@@ -89,7 +89,7 @@ module Appsignal
             transaction.add_params_if_nil { request.params }
             transaction.add_headers_if_nil { request.env }
             transaction.add_session_data { request.session if request.respond_to? :session }
-            transaction.add_tags(:request_id => request_id) if request_id
+            transaction.add_tags(request_id: request_id) if request_id
             Appsignal::Transaction.complete_current!
           end
         end
