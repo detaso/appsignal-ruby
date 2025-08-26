@@ -17,8 +17,8 @@ module Appsignal
         require "appsignal/integrations/action_cable"
         ActionCable::Channel::Base.prepend Appsignal::Integrations::ActionCableIntegration
 
-        install_subscribe_callback
-        install_unsubscribe_callback
+        # install_subscribe_callback
+        # install_unsubscribe_callback
       end
 
       private
